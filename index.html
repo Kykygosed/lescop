@@ -69,6 +69,11 @@ a.bl{background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;padding:6px 1
 .hd small{font-weight:600;color:var(--mut)}.hd.td,.hd.td small{color:var(--bl)}
 .sl.ca{background:repeating-linear-gradient(135deg,#e5384d 0 12px,#c9283c 12px 24px);border:2px solid #ffffff66;color:#fff}
 .sl.rt{background:#111827;border:2px dashed #f5c518;color:#fff}
+.dj{padding:0;overflow:hidden}.dh{display:flex;align-items:center;gap:16px;padding:16px 18px;cursor:pointer}
+.db{width:58px;height:62px;border-radius:14px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 6px 16px var(--gl);flex:none}
+.dj.today .db{background:linear-gradient(135deg,#ff7a59,#ff3d71)}.db b{font-size:24px;line-height:1}.db span{font-size:12px}
+.di{flex:1;min-width:0}.di .tag{margin:4px 6px 0 0;color:#fff}.ch{font-size:26px;color:var(--mut);transition:transform .25s}.dj.open .ch{transform:rotate(90deg)}
+.dj:hover{box-shadow:0 10px 28px var(--gl)}.dd{padding:0 18px 16px;animation:up .3s}.dv{padding:10px 14px;margin-top:10px;background:var(--ln);border-radius:12px}.dv p{margin:6px 0 0;white-space:pre-wrap}
 </style></head><body>
 <div id="app"></div><div id="modal"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-app-compat.min.js"></script>
@@ -171,8 +176,11 @@ function newEval(){frm('Nouvelle évaluation',[{k:'titre',l:'Titre'},{k:'matiere
 function cdt(){const d=L(D.devoirs).filter(x=>x.prof==me.id).sort((a,b)=>b.date>a.date?1:-1);
 return`<div class=row style="justify-content:space-between"><h2>Cahier de textes</h2><button onclick="newDev()">+ Devoir</button></div>${d.map(x=>`<div class=card><div class=row style="justify-content:space-between"><b>${e((D.classes?.[x.classe]||{}).nom)} · ${e((D.matieres?.[x.matiere]||{}).nom)} · pour le ${x.date}</b><button class=red onclick="del('devoirs/${x.id}')">×</button></div><p style="white-space:pre-wrap">${e(x.txt)}</p></div>`).join('')||'<p class=mut>Aucun devoir.</p>'}`}
 function newDev(){frm('Nouveau devoir',[{k:'classe',l:'Classe',t:'select',o:opts(cls())},{k:'matiere',l:'Matière',t:'select',o:opts(mats())},{k:'date',l:'Pour le',t:'date',v:today()},{k:'txt',l:'Travail à faire',t:'textarea'}],r=>{r.prof=me.id;push('devoirs',r)})}
-function devoirs(){const d=L(D.devoirs).filter(x=>x.classe==me.classe).sort((a,b)=>a.date>b.date?1:-1);
-return`<h2>Devoirs</h2>${d.map(x=>{const m=D.matieres?.[x.matiere]||{nom:'?',couleur:'#888'};return`<div class=card style="border-left:8px solid ${m.couleur}"><b>${e(m.nom)}</b> <span class=mut>pour le ${x.date} · ${e(U(x.prof).nom)}</span><p style="white-space:pre-wrap">${e(x.txt)}</p></div>`}).join('')||'<p class=mut>Pas de devoirs. 🎉</p>'}`}
+function devoirs(){const t=today(),by={};L(D.devoirs).filter(x=>x.classe==me.classe).forEach(x=>(by[x.date]=by[x.date]||[]).push(x));
+const days=Object.keys(by).filter(d=>S.past?d<t:d>=t).sort((x,y)=>S.past?(x<y?1:-1):(x>y?1:-1)),M=id=>D.matieres?.[id]||{nom:'?',couleur:'#888'};
+const lab=d=>{const n=Math.round((new Date(d+'T12:00')-new Date(t+'T12:00'))/864e5);return n==0?"Aujourd'hui":n==1?'Demain':new Date(d+'T12:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})};
+return`<div class=row style="justify-content:space-between"><h2>Devoirs</h2><button class=ghost onclick="S.past=!S.past;S.dj=null;render()">${S.past?'À venir':'Jours passés'}</button></div>${days.map(d=>{const dt=new Date(d+'T12:00'),o=S.dj==d,ms=[...new Set(by[d].map(x=>x.matiere))];
+return`<div class="card dj ${o?'open':''} ${d==t?'today':''}"><div class=dh onclick="S.dj=S.dj=='${d}'?null:'${d}';render()"><div class=db><b>${dt.getDate()}</b><span>${dt.toLocaleDateString('fr-FR',{month:'short'})}</span></div><div class=di><b>${e(lab(d))}</b><div>${ms.map(m=>`<span class=tag style="background:${M(m).couleur}">${e(M(m).nom)}</span>`).join('')}</div></div><span class=ch>›</span></div>${o?`<div class=dd>${by[d].map(x=>`<div class=dv style="border-left:6px solid ${M(x.matiere).couleur}"><b>${e(M(x.matiere).nom)}</b> <span class=mut>${e(U(x.prof).nom)}</span><p>${e(x.txt)}</p></div>`).join('')}</div>`:''}</div>`}).join('')||`<p class="mut emp">${S.past?'Aucun devoir passé.':'Aucun devoir à venir 🎉'}</p>`}`}
 /* NOTES */
 function notes(){const ev=L(D.evals).filter(x=>x.classe==me.classe),by={};
 ev.forEach(x=>{const v=(x.notes||{})[me.id];if(v==null)return;const o=by[x.matiere]=by[x.matiere]||{n:0,c:0,l:[]};o.l.push([x,v]);if(x.mode=='note'){o.n+=v/x.sur*20*x.coef;o.c+=x.coef}});

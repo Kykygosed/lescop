@@ -3,36 +3,62 @@
 <title>ENT Lescop</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#eef2f9;--card:#fff;--tx:#14213d;--mut:#6b7a99;--bl:#1d4ed8;--bl2:#0b2a7a;--ln:#dde4f0}
-@media(prefers-color-scheme:dark){:root{--bg:#0e1424;--card:#172038;--tx:#e8edf8;--mut:#93a1c2;--ln:#26324f}}
-*{box-sizing:border-box}body{margin:0;font:15px/1.5 Manrope,system-ui,sans-serif;background:var(--bg);color:var(--tx)}
-#app{display:flex;min-height:100vh}main{flex:1;padding:28px 32px;min-width:0}
-aside{width:230px;background:linear-gradient(180deg,#1d4ed8,#0b2a7a);color:#fff;padding:22px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:4px}
-aside h1{font-size:22px;margin:0 8px 2px;font-weight:800}aside small{margin:0 8px 18px;opacity:.7}
-aside a{padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600;color:#dbe6ff}
-aside a:hover{background:#ffffff1f}aside a.on{background:#fff;color:var(--bl2)}aside .sp{flex:1}
-h2{font-size:26px;margin:0 0 18px;font-weight:800}h3{margin:0 0 8px}
-.card{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:16px;margin-bottom:14px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
-button{background:var(--bl);color:#fff;border:0;border-radius:9px;padding:8px 14px;font:inherit;font-weight:600;cursor:pointer}
-button:hover{filter:brightness(1.1)}button.ghost{background:transparent;color:var(--bl);border:1px solid var(--ln)}button.red{background:#d33}
-button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,aside a:focus-visible{outline:3px solid #f5c518;outline-offset:2px}
-input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--ln);border-radius:9px;background:var(--card);color:var(--tx);font:inherit}
-label{display:block;margin-bottom:10px;font-weight:600;font-size:13px;color:var(--mut)}
-table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid var(--ln);text-align:left}
+:root{--bg:#eaf0ff;--card:#ffffffd9;--tx:#10193a;--mut:#6a789c;--bl:#2563eb;--bl2:#0b2a7a;--ln:#d9e2f6;--gl:#2563eb55}
+@media(prefers-color-scheme:dark){:root{--bg:#080d1c;--card:#121b35d9;--tx:#e8edf8;--mut:#93a1c2;--ln:#243050;--gl:#4f8cff44}}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.55 Manrope,system-ui,sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden}
+body::before,body::after{content:"";position:fixed;width:520px;height:520px;border-radius:50%;filter:blur(90px);opacity:.4;z-index:-1;animation:fl 18s ease-in-out infinite alternate}
+body::before{background:#3b82f6;top:-160px;left:-120px}body::after{background:#a78bfa;bottom:-200px;right:240px;animation-delay:-9s}
+@keyframes fl{to{transform:translate(120px,80px) scale(1.15)}}@keyframes up{from{opacity:0;transform:translateY(14px)}}
+@keyframes pop{from{opacity:0;transform:scale(.92) translateY(10px)}}@keyframes fade{from{opacity:0}}@keyframes tin{from{opacity:0;transform:translateY(20px)}}
+@keyframes pulse{50%{box-shadow:0 0 34px #fff8}}
+#app{display:flex;min-height:100vh}main{flex:1;padding:30px 36px;min-width:0}
+.pg{animation:up .45s cubic-bezier(.2,.8,.2,1)}.pg .grid>*{animation:up .5s both}.pg .grid>:nth-child(2){animation-delay:.05s}.pg .grid>:nth-child(3){animation-delay:.1s}.pg .grid>:nth-child(4){animation-delay:.15s}.pg .grid>:nth-child(n+5){animation-delay:.2s}
+aside{width:250px;background:linear-gradient(170deg,#2f6bff,#1238a8 60%,#0b2a7a);color:#fff;padding:24px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:5px;box-shadow:-14px 0 44px #1d4ed844}
+.logo{width:48px;height:48px;border-radius:15px;background:#ffffff26;display:grid;place-items:center;font-size:25px;margin:0 8px 10px;box-shadow:0 0 24px #fff5;animation:pulse 3s infinite}
+aside h1{font-size:22px;margin:0 8px 2px;font-weight:800}aside small{margin:0 8px 18px;opacity:.75;line-height:1.3}
+aside a{display:flex;align-items:center;gap:11px;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:600;color:#dbe6ff;transition:transform .2s,background .2s}
+aside a i{font-style:normal;width:22px;text-align:center}aside a:hover{background:#ffffff22;transform:translateX(-4px)}
+aside a.on{background:#fff;color:var(--bl2);box-shadow:0 8px 22px #0005}aside .sp{flex:1}
+.bd{margin-left:auto;background:#ff4d6d;color:#fff;border-radius:99px;padding:0 8px;font-size:12px;line-height:20px;animation:pulse 2s infinite}
+h2{font-size:30px;margin:0 0 20px;font-weight:800;letter-spacing:-.02em}h3{margin:0 0 8px}
+.card{background:var(--card);backdrop-filter:blur(14px);border:1px solid var(--ln);border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:0 4px 18px #1d4ed811;transition:transform .25s,box-shadow .25s}
+.grid>.card:hover{transform:translateY(-4px);box-shadow:0 14px 34px var(--gl)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}.st{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:18px}
+.stat span{font-size:26px}.stat b{font-size:34px;line-height:1.1;display:block}.stat small{color:var(--mut)}
+button{background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;border:0;border-radius:11px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 4px 14px var(--gl);transition:transform .15s,box-shadow .2s}
+button:hover{transform:translateY(-2px);box-shadow:0 8px 22px var(--gl)}button:active{transform:scale(.95)}
+button.ghost{background:transparent;color:var(--bl);border:1px solid var(--ln);box-shadow:none}button.red{background:linear-gradient(135deg,#ff5d73,#d6293e);box-shadow:0 4px 14px #d6293e44}
+:focus-visible{outline:3px solid #f5c518;outline-offset:2px}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--ln);border-radius:11px;background:var(--card);color:var(--tx);font:inherit;transition:box-shadow .2s,border-color .2s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--bl);box-shadow:0 0 0 4px var(--gl)}
+label{display:block;margin-bottom:12px;font-weight:600;font-size:13px;color:var(--mut)}
+table{width:100%;border-collapse:collapse}td,th{padding:10px 8px;border-bottom:1px solid var(--ln);text-align:left}tr{transition:background .2s}tr:hover{background:var(--ln)}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row.end{justify-content:flex-end}.mut{color:var(--mut);font-size:13px}
-.av{width:38px;height:38px;border-radius:50%;object-fit:cover;background:var(--bl);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:800}
-.pi{border-radius:4px 4px 14px 4px;padding:16px;box-shadow:2px 4px 10px #0003;color:#222;white-space:pre-wrap}.pi img{max-width:100%;border-radius:6px;margin-top:8px}
-.tag{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:700;background:var(--ln)}
-#modal{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;z-index:9;padding:16px}
-.box{background:var(--card);border-radius:16px;padding:22px;width:420px;max-width:100%;max-height:90vh;overflow:auto}
-#login{margin:12vh auto;width:340px;max-width:92vw}
-.edt{display:grid;grid-template-columns:48px repeat(5,1fr);gap:0}.edt .col{position:relative;height:660px;border-left:1px solid var(--ln)}
+.av{width:40px;height:40px;border-radius:50%;object-fit:cover;background:linear-gradient(135deg,#3b82f6,#8b5cf6);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex:none;box-shadow:0 2px 10px var(--gl)}
+.pi{border-radius:4px 4px 18px 4px;padding:18px;box-shadow:2px 6px 16px #0003;color:#222;white-space:pre-wrap;transition:transform .25s,box-shadow .25s}.pi img{max-width:100%;border-radius:8px;margin-top:8px}
+.grid>.pi:nth-child(odd){transform:rotate(-1.2deg)}.grid>.pi:nth-child(even){transform:rotate(1.2deg)}.grid>.pi:hover{transform:rotate(0) scale(1.03);box-shadow:4px 14px 30px #0004}
+.tag{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:700;background:var(--ln)}
+#modal{position:fixed;inset:0;background:#050b1caa;backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:9;padding:16px;animation:fade .2s}
+.box{background:var(--bg);border:1px solid var(--ln);border-radius:20px;padding:24px;width:460px;max-width:100%;max-height:90vh;overflow:auto;box-shadow:0 30px 80px #0007;animation:pop .3s cubic-bezier(.2,1.2,.3,1)}
+#login{margin:12vh auto;width:370px;max-width:92vw;padding:30px;animation:pop .6s cubic-bezier(.2,1.2,.3,1);box-shadow:0 20px 70px var(--gl)}
+#login h2{text-align:center;font-size:34px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;background-clip:text;color:transparent}#login h2::before{content:"🎓 ";-webkit-text-fill-color:initial}
+.toast{position:fixed;left:24px;bottom:24px;background:#10193a;color:#fff;padding:12px 20px;border-radius:14px;box-shadow:0 10px 30px #0006;animation:tin .35s both;z-index:20;font-weight:600}
+.edt{display:grid;grid-template-columns:48px repeat(7,1fr);gap:0}.edt .col{position:relative;height:660px;border-left:1px solid var(--ln)}
 .edt .hr{height:60px;font-size:11px;color:var(--mut)}.edt .hd{font-weight:800;text-align:center;padding:6px}
-.sl{position:absolute;left:2px;right:2px;border-radius:8px;padding:4px 7px;color:#fff;font-size:12px;overflow:hidden;line-height:1.3}
-.dot{width:26px;height:26px;border-radius:50%;display:inline-block;border:3px solid transparent;cursor:pointer;vertical-align:middle}.dot.s{border-color:var(--tx)}
+.sl{position:absolute;left:3px;right:3px;border-radius:10px;padding:5px 8px;color:#fff;font-size:12px;overflow:hidden;line-height:1.3;box-shadow:0 3px 10px #0003;transition:transform .2s,box-shadow .2s;cursor:default}
+.sl:hover{transform:scale(1.04);z-index:2;box-shadow:0 10px 24px #0005}
+.dot{width:28px;height:28px;border-radius:50%;display:inline-block;border:3px solid transparent;cursor:pointer;vertical-align:middle;transition:transform .15s}.dot:hover{transform:scale(1.2)}.dot.s{border-color:var(--tx);box-shadow:0 0 12px currentColor}
 .abs{background:#e5484d22!important;outline:2px solid #e5484d}
-@media(max-width:760px){#app{flex-direction:column-reverse}aside{width:100%;height:auto;position:static;flex-direction:row;flex-wrap:wrap}aside small,aside .sp{display:none}main{padding:16px}}
+.mail{display:grid;grid-template-columns:190px 340px 1fr;gap:14px;align-items:start;height:calc(100vh - 140px);min-height:420px}.mail>.card{margin:0;height:100%;overflow:auto}
+.mf{display:flex;flex-direction:column;gap:4px}.mf button{margin-bottom:12px}
+.mf a{display:flex;gap:8px;align-items:center;padding:10px 12px;border-radius:11px;cursor:pointer;font-weight:600;transition:background .2s}.mf a:hover{background:var(--ln)}.mf a.on{background:var(--bl);color:#fff}
+.mi{display:flex;gap:10px;padding:12px;border-radius:12px;cursor:pointer;border-left:4px solid transparent;transition:.2s}.mi>div{min-width:0;flex:1}.mi:hover{background:var(--ln)}.mi.on{background:var(--ln);border-left-color:var(--bl)}
+.mi.nl{border-left-color:#ff4d6d}.mi.nl b,.mi.nl .sj{font-weight:800}.sj{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pv{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mb{white-space:pre-wrap;margin-top:18px;padding-top:18px;border-top:1px solid var(--ln);animation:up .35s}.emp{text-align:center;padding:40px 10px}
+@media(max-width:900px){.mail{grid-template-columns:1fr;height:auto}.mail>.card{height:auto;max-height:60vh}}
+@media(max-width:760px){#app{flex-direction:column-reverse}aside{width:100%;height:auto;position:static;flex-direction:row;flex-wrap:wrap}aside small,aside .sp,.logo,aside h1{display:none}main{padding:16px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style></head><body>
 <div id="app"></div><div id="modal"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-app-compat.min.js"></script>
@@ -48,7 +74,8 @@ const U=id=>(D.users||{})[id]||{nom:'(supprimé)'},users=t=>L(D.users).filter(u=
 const cls=()=>L(D.classes),mats=()=>L(D.matieres),today=()=>new Date().toISOString().slice(0,10);
 const opts=(a,f=x=>x.id,l=x=>x.nom)=>a.map(x=>[f(x),l(x)]);
 const COL={Rouge:'#e5484d',Jaune:'#f5c518',Bleu:'#3b82f6',Vert:'#30a46c'};
-const JOURS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi'];
+const JOURS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+const ICO={accueil:'🏠',vs:'🛎️',msg:'✉️',classes:'🏫',mat:'📚',comptes:'👥',appel:'✅',edt:'🗓️',eval:'📝',cdt:'📓',sanc:'⚠️',devoirs:'🎒',notes:'📊'};
 const MENU={admin:[['accueil','Accueil'],['vs','Vie scolaire'],['msg','Messagerie'],['classes','Classes'],['mat','Matières'],['comptes','Comptes']],
 prof:[['appel','Appel'],['msg','Messagerie'],['edt','Emploi du temps'],['eval','Évaluation'],['cdt','Cahier de textes'],['sanc','Sanctions']],
 eleve:[['accueil','Accueil'],['devoirs','Devoirs'],['edt','Emploi du temps'],['notes','Notes'],['msg','Messagerie'],['vs','Vie scolaire']]};
@@ -56,40 +83,43 @@ db.on('value',s=>{D=s.val()||{};if(!D.users&&!boot){boot=true;push('users',{logi
 if(me&&D.users&&D.users[me.id])me={id:me.id,...D.users[me.id]};if($('#modal').style.display=='flex')dirty=true;else render()});
 function closeM(){$('#modal').style.display='none';if(dirty){dirty=false;render()}}
 function b64(f,max=700){return new Promise(r=>{const i=new Image,u=URL.createObjectURL(f);i.onload=()=>{const k=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);r(c.toDataURL('image/jpeg',.75))};i.src=u})}
-function form(title,fs,cb){const m=$('#modal');m.innerHTML=`<div class=box><h3>${title}</h3>${fs.map(f=>`<label>${f.l}${f.t=='textarea'?`<textarea id=f_${f.k} rows=4>${e(f.v)}</textarea>`:f.t=='select'?`<select id=f_${f.k}>${f.o.map(([v,l])=>`<option value="${e(v)}" ${v==f.v?'selected':''}>${e(l)}</option>`).join('')}</select>`:f.t=='file'?`<input id=f_${f.k} type=file accept="image/*">`:`<input id=f_${f.k} type="${f.t||'text'}" value="${e(f.v)}">`}</label>`).join('')}<div class="row end"><button class=ghost onclick=closeM()>Annuler</button><button id=ok>Enregistrer</button></div></div>`;m.style.display='flex';
-$('#ok').onclick=async()=>{const r={};for(const f of fs){const x=$('#f_'+f.k);r[f.k]=f.t=='file'?(x.files[0]?await b64(x.files[0],f.max):f.v||''):x.value}cb(r);closeM()}}
-function login(){$('#app').innerHTML=`<div id=login class=card><h2>ENT Lescop</h2><label>Identifiant<input id=lg></label><label>Mot de passe<input id=pw type=password></label><button onclick=doLogin() style="width:100%">Se connecter</button><p id=err class=mut></p></div>`;$('#pw').onkeydown=k=>k.key=='Enter'&&doLogin()}
-function doLogin(){const u=users().find(u=>u.login==$('#lg').value&&u.pw==$('#pw').value);if(!u){$('#err').textContent='Identifiant ou mot de passe incorrect.';return}me=u;view=MENU[u.type][0][0];try{localStorage.ent=u.id}catch(x){}render()}
+function frm(title,fs,cb){const m=$('#modal');m.innerHTML=`<div class=box><h3>${title}</h3>${fs.map(f=>`<label>${f.l}${f.t=='textarea'?`<textarea id=f_${f.k} rows=4>${e(f.v)}</textarea>`:f.t=='select'?`<select id=f_${f.k}>${f.o.map(([v,l])=>`<option value="${e(v)}" ${v==f.v?'selected':''}>${e(l)}</option>`).join('')}</select>`:f.t=='file'?`<input id=f_${f.k} type=file accept="image/*">`:`<input id=f_${f.k} type="${f.t||'text'}" value="${e(f.v)}">`}</label>`).join('')}<div class="row end"><button class=ghost onclick=closeM()>Annuler</button><button id=ok>Enregistrer</button></div></div>`;m.style.display='flex';
+$('#ok').onclick=async()=>{const r={};for(const f of fs){const x=$('#f_'+f.k);r[f.k]=f.t=='file'?(x.files[0]?await b64(x.files[0],f.max):f.v||''):x.value}cb(r);closeM();toast('Enregistré ✓')}}
+function login(){$('#app').innerHTML=`<div id=login class=card><h2>ENT Lescop</h2><label>Identifiant<input id=lg autocomplete=username></label><label>Mot de passe<input id=pw type=password autocomplete=current-password></label><button onclick=doLogin() style="width:100%">Se connecter</button><p id=err class=mut></p></div>`;$('#pw').addEventListener('keydown',k=>{if(k.key=='Enter')doLogin()});$('#lg').focus()}
+function doLogin(){if(!D.users){$('#err').textContent='Connexion à la base en cours… réessaie dans une seconde.';return}const u=users().find(u=>u.login==$('#lg').value&&u.pw==$('#pw').value);if(!u){$('#err').textContent='Identifiant ou mot de passe incorrect.';return}me=u;view=MENU[u.type][0][0];try{localStorage.ent=u.id}catch(x){}render()}
 function logout(){me=null;try{delete localStorage.ent}catch(x){}render()}
-const nav=v=>{view=v;S={};render()};
+const nav=v=>{view=v;S={};window.A=1;render()};
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
 function render(){if(!me){try{if(localStorage.ent&&D.users&&D.users[localStorage.ent]){me={id:localStorage.ent,...D.users[localStorage.ent]};view=MENU[me.type][0][0]}}catch(x){}}
-if(!me)return login();const V={accueil,vs,msg,classes,mat:matieres,comptes,appel,edt,eval:evals,cdt,sanc,devoirs,notes}[view];
-$('#app').innerHTML=`<main>${V()}</main><aside><h1>ENT Lescop</h1><small>${e(me.nom)} · ${me.type}</small>${MENU[me.type].map(([k,l])=>`<a tabindex=0 class="${k==view?'on':''}" onclick="nav('${k}')">${l}</a>`).join('')}<div class=sp></div><a onclick=logout()>Déconnexion</a></aside>`}
+if(!me){if(!$('#login'))login();return}const V={accueil,vs,msg,classes,mat:matieres,comptes,appel,edt,eval:evals,cdt,sanc,devoirs,notes}[view];
+const nu=L(D.msgs).filter(x=>x.to==me.id&&!x.lu&&!x['x_'+me.id]).length;
+$('#app').innerHTML=`<main class="${window.A?'pg':''}">${V()}</main><aside><div class=logo>🎓</div><h1>ENT Lescop</h1><small>${e(me.nom)}<br>${me.type}</small>${MENU[me.type].map(([k,l])=>`<a tabindex=0 class="${k==view?'on':''}" onclick="nav('${k}')"><i>${ICO[k]}</i>${l}${k=='msg'&&nu?`<b class=bd>${nu}</b>`:''}</a>`).join('')}<div class=sp></div><a onclick=logout()><i>↩</i>Déconnexion</a></aside>`;window.A=0}
 const av=u=>u.photo?`<img class=av src="${u.photo}">`:`<span class=av>${e((u.nom||'?')[0])}</span>`;
 /* ACCUEIL */
 const PC={Jaune:'#fde68a',Rose:'#fbcfe8',Bleu:'#bfdbfe',Vert:'#bbf7d0'};
 function accueil(){const p=L(D.postits).sort((a,b)=>b.ts-a.ts);const ad=me.type=='admin';
-return`<div class="row" style="justify-content:space-between"><h2>Accueil</h2>${ad?`<button onclick="editPi()">+ Post-it</button>`:''}</div><div class=grid>${p.map(x=>`<div class=pi style="background:${PC[x.couleur]||PC.Jaune};font-size:${x.taille||16}px;font-weight:${x.style=='gras'?800:400};font-style:${x.style=='italique'?'italic':'normal'}">${e(x.txt)}${x.img?`<img src="${x.img}">`:''}${ad?`<div class="row" style="margin-top:10px"><button class=ghost onclick="editPi('${x.id}')">Modifier</button><button class=red onclick="del('postits/${x.id}')">×</button></div>`:''}</div>`).join('')||'<p class=mut>Aucune information pour le moment.</p>'}</div>`}
-function editPi(id){const x=id?D.postits[id]:{};form('Post-it',[{k:'txt',l:'Texte',t:'textarea',v:x.txt},{k:'couleur',l:'Couleur',t:'select',o:Object.keys(PC).map(c=>[c,c]),v:x.couleur},{k:'style',l:'Mise en forme',t:'select',o:[['normal','Normal'],['gras','Gras'],['italique','Italique']],v:x.style},{k:'taille',l:'Taille',t:'select',o:[[14,'Petit'],[16,'Normal'],[22,'Grand'],[30,'Très grand']],v:x.taille},{k:'img',l:'Image',t:'file',v:x.img,max:800}],r=>{r.taille=+r.taille;r.ts=x.ts||Date.now();id?upd('postits/'+id,r):push('postits',r)})}
+return`<div class="row" style="justify-content:space-between"><h2>Bonjour ${e((me.nom||'').split(' ')[0])} 👋</h2>${ad?`<button onclick="editPi()">+ Post-it</button>`:''}</div>${ad?stats():''}<div class=grid>${p.map(x=>`<div class=pi style="background:${PC[x.couleur]||PC.Jaune};font-size:${x.taille||16}px;font-weight:${x.style=='gras'?800:400};font-style:${x.style=='italique'?'italic':'normal'}">${e(x.txt)}${x.img?`<img src="${x.img}">`:''}${ad?`<div class="row" style="margin-top:10px"><button class=ghost onclick="editPi('${x.id}')">Modifier</button><button class=red onclick="del('postits/${x.id}')">×</button></div>`:''}</div>`).join('')||'<p class=mut>Aucune information pour le moment.</p>'}</div>`}
+const stats=()=>`<div class="grid st">${[['🎒',users('eleve').length,'Élèves'],['👩‍🏫',users('prof').length,'Professeurs'],['🏫',cls().length,'Classes'],['🚫',L(D.vs).filter(v=>v.date==today()&&v.kind=='Absence').length,'Absents du jour']].map(([i,n,l])=>`<div class="card stat"><span>${i}</span><b>${n}</b><small>${l}</small></div>`).join('')}</div>`;
+function editPi(id){const x=id?D.postits[id]:{};frm('Post-it',[{k:'txt',l:'Texte',t:'textarea',v:x.txt},{k:'couleur',l:'Couleur',t:'select',o:Object.keys(PC).map(c=>[c,c]),v:x.couleur},{k:'style',l:'Mise en forme',t:'select',o:[['normal','Normal'],['gras','Gras'],['italique','Italique']],v:x.style},{k:'taille',l:'Taille',t:'select',o:[[14,'Petit'],[16,'Normal'],[22,'Grand'],[30,'Très grand']],v:x.taille},{k:'img',l:'Image',t:'file',v:x.img,max:800}],r=>{r.taille=+r.taille;r.ts=x.ts||Date.now();id?upd('postits/'+id,r):push('postits',r)})}
 /* COMPTES */
 function comptes(){return`<div class=row style="justify-content:space-between"><h2>Comptes</h2><button onclick="editU()">+ Compte</button></div><div class=card><table>${users().map(u=>`<tr><td>${av(u)}</td><td><b>${e(u.nom)}</b><br><span class=mut>${e(u.login)} / ${e(u.pw)}</span></td><td><span class=tag>${u.type}</span> ${u.type=='eleve'?e((D.classes?.[u.classe]||{}).nom||'sans classe'):''}</td><td class=row><button class=ghost onclick="editU('${u.id}')">Modifier</button><button class=red onclick="confirm('Supprimer ?')&&del('users/${u.id}')">×</button></td></tr>`).join('')}</table></div>`}
-function editU(id){const x=id?D.users[id]:{type:'eleve'};form(id?'Modifier le compte':'Nouveau compte',[{k:'nom',l:'Nom complet',v:x.nom},{k:'login',l:'Identifiant',v:x.login},{k:'pw',l:'Mot de passe',v:x.pw},{k:'type',l:'Type',t:'select',o:[['eleve','Élève'],['prof','Professeur'],['admin','Admin']],v:x.type},{k:'classe',l:'Classe (élèves)',t:'select',o:[['','—'],...opts(cls())],v:x.classe},{k:'photo',l:'Photo',t:'file',v:x.photo,max:200}],r=>id?upd('users/'+id,r):push('users',r))}
+function editU(id){const x=id?D.users[id]:{type:'eleve'};frm(id?'Modifier le compte':'Nouveau compte',[{k:'nom',l:'Nom complet',v:x.nom},{k:'login',l:'Identifiant',v:x.login},{k:'pw',l:'Mot de passe',v:x.pw},{k:'type',l:'Type',t:'select',o:[['eleve','Élève'],['prof','Professeur'],['admin','Admin']],v:x.type},{k:'classe',l:'Classe (élèves)',t:'select',o:[['','—'],...opts(cls())],v:x.classe},{k:'photo',l:'Photo',t:'file',v:x.photo,max:200}],r=>id?upd('users/'+id,r):push('users',r))}
 /* MATIERES */
 function matieres(){return`<div class=row style="justify-content:space-between"><h2>Matières</h2><button onclick="editM()">+ Matière</button></div><div class=grid>${mats().map(m=>`<div class=card style="border-left:8px solid ${m.couleur}"><b>${e(m.nom)}</b><div class=row style="margin-top:8px"><button class=ghost onclick="editM('${m.id}')">Modifier</button><button class=red onclick="del('matieres/${m.id}')">×</button></div></div>`).join('')}</div>`}
-function editM(id){const x=id?D.matieres[id]:{couleur:'#3b82f6'};form('Matière',[{k:'nom',l:'Nom',v:x.nom},{k:'couleur',l:'Couleur',t:'color',v:x.couleur}],r=>id?upd('matieres/'+id,r):push('matieres',r))}
+function editM(id){const x=id?D.matieres[id]:{couleur:'#3b82f6'};frm('Matière',[{k:'nom',l:'Nom',v:x.nom},{k:'couleur',l:'Couleur',t:'color',v:x.couleur}],r=>id?upd('matieres/'+id,r):push('matieres',r))}
 /* CLASSES + EDT */
 function classes(){const c=S.cl&&D.classes?.[S.cl];
 if(c)return`<div class=row><button class=ghost onclick="S={};render()">← Classes</button><h2 style="margin:0">${e(c.nom)}</h2><button onclick="editSlot('${S.cl}')">+ Cours</button></div><p class=mut>${users('eleve').filter(u=>u.classe==S.cl).length} élève(s)</p>${edtHTML(L(c.edt),'admin',S.cl)}`;
-return`<div class=row style="justify-content:space-between"><h2>Classes</h2><button onclick="form('Nouvelle classe',[{k:'nom',l:'Nom de la classe'}],r=>push('classes',r))">+ Classe</button></div><div class=grid>${cls().map(c=>`<div class=card><b>${e(c.nom)}</b><p class=mut>${users('eleve').filter(u=>u.classe==c.id).length} élèves</p><div class=row><button onclick="S.cl='${c.id}';render()">Emploi du temps</button><button class=red onclick="confirm('Supprimer la classe ?')&&del('classes/${c.id}')">×</button></div></div>`).join('')}</div>`}
-function editSlot(cid,sid){const x=sid?D.classes[cid].edt[sid]:{heure:'08:00',duree:60};form('Cours',[{k:'jour',l:'Jour',t:'select',o:JOURS.map((j,i)=>[i,j]),v:x.jour},{k:'heure',l:'Heure',t:'time',v:x.heure},{k:'duree',l:'Durée (min)',t:'number',v:x.duree},{k:'matiere',l:'Matière',t:'select',o:opts(mats()),v:x.matiere},{k:'prof',l:'Professeur',t:'select',o:opts(users('prof')),v:x.prof},{k:'lieu',l:'Lieu / salle',v:x.lieu}],r=>{r.jour=+r.jour;r.duree=+r.duree;sid?upd(`classes/${cid}/edt/${sid}`,r):push(`classes/${cid}/edt`,r)})}
+return`<div class=row style="justify-content:space-between"><h2>Classes</h2><button onclick="frm('Nouvelle classe',[{k:'nom',l:'Nom de la classe'}],r=>push('classes',r))">+ Classe</button></div><div class=grid>${cls().map(c=>`<div class=card><b>${e(c.nom)}</b><p class=mut>${users('eleve').filter(u=>u.classe==c.id).length} élèves</p><div class=row><button onclick="S.cl='${c.id}';render()">Emploi du temps</button><button class=red onclick="confirm('Supprimer la classe ?')&&del('classes/${c.id}')">×</button></div></div>`).join('')}</div>`}
+function editSlot(cid,sid){const x=sid?D.classes[cid].edt[sid]:{heure:'08:00',duree:60};frm('Cours',[{k:'jour',l:'Jour',t:'select',o:JOURS.map((j,i)=>[i,j]),v:x.jour},{k:'heure',l:'Heure',t:'time',v:x.heure},{k:'duree',l:'Durée (min)',t:'number',v:x.duree},{k:'matiere',l:'Matière',t:'select',o:opts(mats()),v:x.matiere},{k:'prof',l:'Professeur',t:'select',o:opts(users('prof')),v:x.prof},{k:'lieu',l:'Lieu / salle',v:x.lieu}],r=>{r.jour=+r.jour;r.duree=+r.duree;sid?upd(`classes/${cid}/edt/${sid}`,r):push(`classes/${cid}/edt`,r)})}
 function edtHTML(sl,mode,cid){const h=['08','09','10','11','12','13','14','15','16','17','18'];
-return`<div class=card style="overflow:auto"><div class=edt style="min-width:640px"><div></div>${JOURS.map(j=>`<div class=hd>${j}</div>`).join('')}<div>${h.map(x=>`<div class=hr>${x}h</div>`).join('')}</div>${JOURS.map((j,d)=>`<div class=col>${sl.filter(s=>s.jour==d).map(s=>{const [a,b]=(s.heure||'8:00').split(':'),t=(+a-8)*60+ +b,m=D.matieres?.[s.matiere]||{nom:'?',couleur:'#888'};
+return`<div class=card style="overflow:auto"><div class=edt style="min-width:820px"><div></div>${JOURS.map(j=>`<div class=hd>${j}</div>`).join('')}<div>${h.map(x=>`<div class=hr>${x}h</div>`).join('')}</div>${JOURS.map((j,d)=>`<div class=col>${sl.filter(s=>s.jour==d).map(s=>{const [a,b]=(s.heure||'8:00').split(':'),t=(+a-8)*60+ +b,m=D.matieres?.[s.matiere]||{nom:'?',couleur:'#888'};
 return`<div class=sl style="top:${t}px;height:${s.duree}px;background:${m.couleur}" ${mode=='admin'?`onclick="slotMenu('${cid}','${s.id}')"`:''}><b>${e(m.nom)}</b><br>${s.heure} · ${e(s.lieu||'')}<br>${e(U(s.prof).nom)}${s.cls?' · '+e(s.cls):''}</div>`}).join('')}</div>`).join('')}</div></div>`}
-function slotMenu(c,s){form('Cours',[{k:'a',l:'Action',t:'select',o:[['m','Modifier'],['d','Supprimer']]}],r=>{if(r.a=='d')del(`classes/${c}/edt/${s}`);else setTimeout(()=>editSlot(c,s),50)})}
+function slotMenu(c,s){frm('Cours',[{k:'a',l:'Action',t:'select',o:[['m','Modifier'],['d','Supprimer']]}],r=>{if(r.a=='d')del(`classes/${c}/edt/${s}`);else setTimeout(()=>editSlot(c,s),50)})}
 function edt(){let sl;if(me.type=='prof'){sl=[];cls().forEach(c=>L(c.edt).forEach(s=>s.prof==me.id&&sl.push({...s,cls:c.nom})))}else sl=L(D.classes?.[me.classe]?.edt);return`<h2>Emploi du temps</h2>${sl.length?edtHTML(sl):'<p class=mut>Aucun cours programmé.</p>'}`}
 /* VIE SCOLAIRE */
 const KIND=['Absence','Retard','Avertissement','Retenue'];
-function billet(kinds){const el=users('eleve');form('Nouveau billet',[{k:'eleve',l:'Élève',t:'select',o:opts(el)},{k:'kind',l:'Type',t:'select',o:kinds.map(k=>[k,k])},{k:'date',l:'Date',t:'date',v:today()},{k:'motif',l:'Motif',t:'textarea'}],r=>{r.auteur=me.id;push('vs',r)})}
+function billet(kinds){const el=users('eleve');frm('Nouveau billet',[{k:'eleve',l:'Élève',t:'select',o:opts(el)},{k:'kind',l:'Type',t:'select',o:kinds.map(k=>[k,k])},{k:'date',l:'Date',t:'date',v:today()},{k:'motif',l:'Motif',t:'textarea'}],r=>{r.auteur=me.id;push('vs',r)})}
 function vsList(a,own){return`<div class=card><table>${a.map(v=>`<tr><td>${v.date}</td>${own?'':`<td>${e(U(v.eleve).nom)}</td>`}<td><span class=tag style="${v.kind=='Absence'||v.kind=='Retenue'?'background:#e5484d33':v.kind=='Retard'?'background:#f5c51855':''}">${v.kind}</span></td><td>${e(v.motif||'')}<br><span class=mut>par ${e(U(v.auteur).nom)}</span></td>${me.type=='admin'?`<td><button class=red onclick="del('vs/${v.id}')">×</button></td>`:''}</tr>`).join('')||'<tr><td class=mut>Rien à signaler.</td></tr>'}</table></div>`}
 function vs(){const a=L(D.vs).sort((x,y)=>y.date>x.date?1:-1);
 if(me.type=='eleve')return`<h2>Vie scolaire</h2>${vsList(a.filter(v=>v.eleve==me.id),1)}`;
@@ -101,21 +131,29 @@ function appel(){const c=S.ac,el=users('eleve').filter(u=>u.classe==c);S.abs=S.a
 return`<h2>Appel</h2><label style="max-width:300px">Classe<select onchange="S.ac=this.value;S.abs={};render()"><option value="">—</option>${cls().map(x=>`<option value="${x.id}" ${x.id==c?'selected':''}>${e(x.nom)}</option>`).join('')}</select></label>
 <div class=grid>${el.map(u=>`<div class="card row ${S.abs[u.id]?'abs':''}" style="cursor:pointer" onclick="S.abs['${u.id}']=!S.abs['${u.id}'];render()">${av(u)}<b>${e(u.nom)}</b><span class=mut>${S.abs[u.id]?'Absent':'Présent'}</span></div>`).join('')}</div>
 ${c?`<button onclick="sendAppel()">Valider l'appel (${Object.values(S.abs).filter(Boolean).length} absent·s)</button>`:''}`}
-function sendAppel(){const a=Object.keys(S.abs).filter(k=>S.abs[k]);a.forEach(id=>push('vs',{eleve:id,kind:'Absence',date:today(),motif:'Signalé à l\'appel',auteur:me.id}));S.abs={};alert('Appel envoyé en vie scolaire.');render()}
+function sendAppel(){const a=Object.keys(S.abs).filter(k=>S.abs[k]);a.forEach(id=>push('vs',{eleve:id,kind:'Absence',date:today(),motif:'Signalé à l\'appel',auteur:me.id}));S.abs={};toast('Appel envoyé en vie scolaire ✓');render()}
 /* MESSAGERIE */
-function msg(){const m=L(D.msgs).sort((a,b)=>b.ts-a.ts),rec=m.filter(x=>x.to==me.id),sen=m.filter(x=>x.from==me.id);
-const ls=(a,k)=>a.map(x=>`<details class=card><summary><b>${e(x.sujet)}</b> <span class=mut>${k=='r'?'de '+e(U(x.from).nom):'à '+e(U(x.to).nom)} · ${new Date(x.ts).toLocaleString('fr-FR')}</span></summary><p style="white-space:pre-wrap">${e(x.txt)}</p></details>`).join('')||'<p class=mut>Aucun message.</p>';
-return`<div class=row style="justify-content:space-between"><h2>Messagerie</h2><button onclick="newMsg()">+ Nouveau message</button></div><h3>Reçus</h3>${ls(rec,'r')}<h3>Envoyés</h3>${ls(sen,'s')}`}
-function newMsg(){form('Nouveau message',[{k:'to',l:'Destinataire',t:'select',o:users().filter(u=>u.id!=me.id).map(u=>[u.id,`${u.nom} (${u.type})`])},{k:'sujet',l:'Objet'},{k:'txt',l:'Message',t:'textarea'}],r=>{r.from=me.id;r.ts=Date.now();push('msgs',r)})}
+function msg(){S.f=S.f||'in';const all=L(D.msgs).sort((a,b)=>b.ts-a.ts).filter(x=>!x['x_'+me.id]&&(x.to==me.id||x.from==me.id));
+const inb=all.filter(x=>x.to==me.id),out=all.filter(x=>x.from==me.id),nu=inb.filter(x=>!x.lu).length;
+const box=S.f=='out'?out:S.f=='un'?inb.filter(x=>!x.lu):inb,cur=all.find(x=>x.id==S.m);
+const fd=(k,i,l,n)=>`<a class="${S.f==k?'on':''}" onclick="S.f='${k}';S.m=null;render()"><i>${i}</i>${l}${n?`<b class=bd>${n}</b>`:''}</a>`;
+const when=t=>{const d=new Date(t);return d.toDateString()==new Date().toDateString()?d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'})};
+return`<h2>Messagerie</h2><div class=mail><div class="mf card"><button onclick="newMsg()">✏️ Écrire</button>${fd('in','📥','Réception',nu)}${fd('un','🔵','Non lus',0)}${fd('out','📤','Envoyés',0)}</div>
+<div class="ml card">${box.map(x=>{const o=S.f=='out',u=U(o?x.to:x.from);return`<div class="mi ${x.id==S.m?'on':''} ${!o&&!x.lu?'nl':''}" onclick="openMsg('${x.id}')">${av(u)}<div><div class=row style="justify-content:space-between;flex-wrap:nowrap"><b>${e(o?'À : '+u.nom:u.nom)}</b><span class=mut>${when(x.ts)}</span></div><div class=sj>${e(x.sujet)}</div><div class="mut pv">${e((x.txt||'').slice(0,70))}</div></div></div>`}).join('')||'<p class="mut emp">📭 Rien ici pour le moment.</p>'}</div>
+<div class="mv card">${cur?`<div class=row style="justify-content:space-between"><h3>${e(cur.sujet)}</h3><div class=row><button class=ghost onclick="replyMsg('${cur.id}')">↩ Répondre</button><button class=red onclick="delMsg('${cur.id}')">🗑</button></div></div><div class=row>${av(U(cur.from))}<div><b>${e(U(cur.from).nom)}</b> <span class=tag>${U(cur.from).type||''}</span><div class=mut>à ${e(U(cur.to).nom)} · ${new Date(cur.ts).toLocaleString('fr-FR')}</div></div></div><div class=mb>${e(cur.txt)}</div>`:'<p class="mut emp">✉️ Choisis un message pour le lire.</p>'}</div></div>`}
+function openMsg(id){S.m=id;const x=D.msgs[id];if(x&&x.to==me.id&&!x.lu)upd('msgs/'+id,{lu:true});render()}
+function delMsg(id){S.m=null;upd('msgs/'+id,{['x_'+me.id]:true});toast('Message supprimé')}
+function replyMsg(id){const x=D.msgs[id];newMsg(x.from,/^Re:/.test(x.sujet)?x.sujet:'Re: '+x.sujet,'\n\n— '+U(x.from).nom+' a écrit :\n'+x.txt.split('\n').map(l=>'> '+l).join('\n'))}
+function newMsg(to,sujet,txt){frm(to?'Répondre':'Nouveau message',[{k:'to',l:'À',t:'select',o:users().filter(u=>u.id!=me.id).map(u=>[u.id,`${u.nom} (${u.type})`]),v:to},{k:'sujet',l:'Objet',v:sujet},{k:'txt',l:'Message',t:'textarea',v:txt}],r=>{r.from=me.id;r.ts=Date.now();r.lu=false;push('msgs',r);S.f='out'})}
 /* EVALUATION */
 function evals(){const c=S.ec,el=users('eleve').filter(u=>u.classe==c),ev=L(D.evals).filter(x=>x.classe==c&&x.prof==me.id);
 return`<div class=row style="justify-content:space-between"><h2>Évaluation</h2>${c?`<button onclick="newEval()">+ Évaluation</button>`:''}</div><label style="max-width:300px">Classe<select onchange="S.ec=this.value;render()"><option value="">—</option>${cls().map(x=>`<option value="${x.id}" ${x.id==c?'selected':''}>${e(x.nom)}</option>`).join('')}</select></label>
 ${ev.map(x=>`<div class=card><div class=row style="justify-content:space-between"><h3>${e(x.titre)} <span class=mut>${e((D.matieres?.[x.matiere]||{}).nom||'')} · ${e(x.comp||'')} · coef ${x.coef}${x.mode=='note'?' · /'+x.sur:''}</span></h3><button class=red onclick="del('evals/${x.id}')">×</button></div><table>${el.map(u=>{const v=(x.notes||{})[u.id];return`<tr><td>${e(u.nom)}</td><td>${x.mode=='note'?`<input type=number step=.25 style="width:90px" value="${v??''}" onchange="upd('evals/${x.id}/notes',{'${u.id}':this.value===''?null:+this.value})"> / ${x.sur}`:Object.entries(COL).map(([n,h])=>`<span class="dot ${v==n?'s':''}" title="${n}" style="background:${h}" onclick="upd('evals/${x.id}/notes',{'${u.id}':'${n}'})"></span>`).join(' ')}</td></tr>`}).join('')}</table></div>`).join('')}`}
-function newEval(){form('Nouvelle évaluation',[{k:'titre',l:'Titre'},{k:'matiere',l:'Matière',t:'select',o:opts(mats())},{k:'comp',l:'Compétence évaluée'},{k:'mode',l:'Notation',t:'select',o:[['note','Note chiffrée'],['couleur','Couleurs (Rouge/Jaune/Bleu/Vert)']]},{k:'sur',l:'Sur (si note)',t:'number',v:20},{k:'coef',l:'Coefficient',t:'number',v:1}],r=>{r.sur=+r.sur||20;r.coef=+r.coef||1;r.classe=S.ec;r.prof=me.id;push('evals',r)})}
+function newEval(){frm('Nouvelle évaluation',[{k:'titre',l:'Titre'},{k:'matiere',l:'Matière',t:'select',o:opts(mats())},{k:'comp',l:'Compétence évaluée'},{k:'mode',l:'Notation',t:'select',o:[['note','Note chiffrée'],['couleur','Couleurs (Rouge/Jaune/Bleu/Vert)']]},{k:'sur',l:'Sur (si note)',t:'number',v:20},{k:'coef',l:'Coefficient',t:'number',v:1}],r=>{r.sur=+r.sur||20;r.coef=+r.coef||1;r.classe=S.ec;r.prof=me.id;push('evals',r)})}
 /* CAHIER DE TEXTES / DEVOIRS */
 function cdt(){const d=L(D.devoirs).filter(x=>x.prof==me.id).sort((a,b)=>b.date>a.date?1:-1);
 return`<div class=row style="justify-content:space-between"><h2>Cahier de textes</h2><button onclick="newDev()">+ Devoir</button></div>${d.map(x=>`<div class=card><div class=row style="justify-content:space-between"><b>${e((D.classes?.[x.classe]||{}).nom)} · ${e((D.matieres?.[x.matiere]||{}).nom)} · pour le ${x.date}</b><button class=red onclick="del('devoirs/${x.id}')">×</button></div><p style="white-space:pre-wrap">${e(x.txt)}</p></div>`).join('')||'<p class=mut>Aucun devoir.</p>'}`}
-function newDev(){form('Nouveau devoir',[{k:'classe',l:'Classe',t:'select',o:opts(cls())},{k:'matiere',l:'Matière',t:'select',o:opts(mats())},{k:'date',l:'Pour le',t:'date',v:today()},{k:'txt',l:'Travail à faire',t:'textarea'}],r=>{r.prof=me.id;push('devoirs',r)})}
+function newDev(){frm('Nouveau devoir',[{k:'classe',l:'Classe',t:'select',o:opts(cls())},{k:'matiere',l:'Matière',t:'select',o:opts(mats())},{k:'date',l:'Pour le',t:'date',v:today()},{k:'txt',l:'Travail à faire',t:'textarea'}],r=>{r.prof=me.id;push('devoirs',r)})}
 function devoirs(){const d=L(D.devoirs).filter(x=>x.classe==me.classe).sort((a,b)=>a.date>b.date?1:-1);
 return`<h2>Devoirs</h2>${d.map(x=>{const m=D.matieres?.[x.matiere]||{nom:'?',couleur:'#888'};return`<div class=card style="border-left:8px solid ${m.couleur}"><b>${e(m.nom)}</b> <span class=mut>pour le ${x.date} · ${e(U(x.prof).nom)}</span><p style="white-space:pre-wrap">${e(x.txt)}</p></div>`}).join('')||'<p class=mut>Pas de devoirs. 🎉</p>'}`}
 /* NOTES */

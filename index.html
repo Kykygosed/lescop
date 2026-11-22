@@ -59,6 +59,13 @@ table{width:100%;border-collapse:collapse}td,th{padding:10px 8px;border-bottom:1
 @media(max-width:900px){.mail{grid-template-columns:1fr;height:auto}.mail>.card{height:auto;max-height:60vh}}
 @media(max-width:760px){#app{flex-direction:column-reverse}aside{width:100%;height:auto;position:static;flex-direction:row;flex-wrap:wrap}aside small,aside .sp,.logo,aside h1{display:none}main{padding:16px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.nt th{background:var(--ln);font-size:13px;color:var(--mut)}.nc{display:inline-block;margin:2px 6px 2px 0;padding:3px 10px;border-radius:99px;background:var(--ln);font-weight:700;transition:transform .15s}.nc:hover{transform:scale(1.1)}.nc small{color:var(--mut);font-weight:600}
+.mo{display:inline-block;padding:3px 12px;border-radius:99px;min-width:62px;text-align:center}.tot td{font-size:16px;border-bottom:0}
+.bd{position:relative;aspect-ratio:5/3;container-type:inline-size;background:#fff;background-image:radial-gradient(#cbd5e8 1px,transparent 1px);background-size:24px 24px;border-radius:18px;border:1px solid var(--ln);box-shadow:0 12px 44px var(--gl);overflow:hidden;color:#14213d;animation:pop .4s}
+.bd svg{position:absolute;inset:0;width:100%;height:100%}.bd.ed{touch-action:none;cursor:crosshair;user-select:none}
+.bi{position:absolute;white-space:pre-wrap;line-height:1.2;max-width:90%}img.bi{height:auto;border-radius:8px;box-shadow:0 4px 14px #0003}
+a.bl{background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;padding:6px 14px;border-radius:99px;font-size:max(12px,1.8cqw);text-decoration:none;font-weight:700;box-shadow:0 4px 14px #1d4ed855;white-space:nowrap}
+.bd .hit{stroke:transparent;stroke-width:22;pointer-events:stroke}.tb{margin:14px 0}
 </style></head><body>
 <div id="app"></div><div id="modal"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-app-compat.min.js"></script>
@@ -75,12 +82,12 @@ const cls=()=>L(D.classes),mats=()=>L(D.matieres),today=()=>new Date().toISOStri
 const opts=(a,f=x=>x.id,l=x=>x.nom)=>a.map(x=>[f(x),l(x)]);
 const COL={Rouge:'#e5484d',Jaune:'#f5c518',Bleu:'#3b82f6',Vert:'#30a46c'};
 const JOURS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
-const ICO={accueil:'🏠',vs:'🛎️',msg:'✉️',classes:'🏫',mat:'📚',comptes:'👥',appel:'✅',edt:'🗓️',eval:'📝',cdt:'📓',sanc:'⚠️',devoirs:'🎒',notes:'📊'};
+const ICO={tableau:'🖍️',accueil:'🏠',vs:'🛎️',msg:'✉️',classes:'🏫',mat:'📚',comptes:'👥',appel:'✅',edt:'🗓️',eval:'📝',cdt:'📓',sanc:'⚠️',devoirs:'🎒',notes:'📊'};
 const MENU={admin:[['accueil','Accueil'],['vs','Vie scolaire'],['msg','Messagerie'],['classes','Classes'],['mat','Matières'],['comptes','Comptes']],
-prof:[['appel','Appel'],['msg','Messagerie'],['edt','Emploi du temps'],['eval','Évaluation'],['cdt','Cahier de textes'],['sanc','Sanctions']],
-eleve:[['accueil','Accueil'],['devoirs','Devoirs'],['edt','Emploi du temps'],['notes','Notes'],['msg','Messagerie'],['vs','Vie scolaire']]};
+prof:[['appel','Appel'],['msg','Messagerie'],['edt','Emploi du temps'],['tableau','Tableau'],['eval','Évaluation'],['cdt','Cahier de textes'],['sanc','Sanctions']],
+eleve:[['accueil','Accueil'],['devoirs','Devoirs'],['edt','Emploi du temps'],['tableau','Tableau'],['notes','Notes'],['msg','Messagerie'],['vs','Vie scolaire']]};
 db.on('value',s=>{D=s.val()||{};if(!D.users&&!boot){boot=true;push('users',{login:'admin',pw:'admin',type:'admin',nom:'Administrateur'});return}
-if(me&&D.users&&D.users[me.id])me={id:me.id,...D.users[me.id]};if($('#modal').style.display=='flex')dirty=true;else render()});
+if(me&&D.users&&D.users[me.id])me={id:me.id,...D.users[me.id]};if($('#modal').style.display=='flex'||window.DRAW)dirty=true;else render()});
 function closeM(){$('#modal').style.display='none';if(dirty){dirty=false;render()}}
 function b64(f,max=700){return new Promise(r=>{const i=new Image,u=URL.createObjectURL(f);i.onload=()=>{const k=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);r(c.toDataURL('image/jpeg',.75))};i.src=u})}
 function frm(title,fs,cb){const m=$('#modal');m.innerHTML=`<div class=box><h3>${title}</h3>${fs.map(f=>`<label>${f.l}${f.t=='textarea'?`<textarea id=f_${f.k} rows=4>${e(f.v)}</textarea>`:f.t=='select'?`<select id=f_${f.k}>${f.o.map(([v,l])=>`<option value="${e(v)}" ${v==f.v?'selected':''}>${e(l)}</option>`).join('')}</select>`:f.t=='file'?`<input id=f_${f.k} type=file accept="image/*">`:`<input id=f_${f.k} type="${f.t||'text'}" value="${e(f.v)}">`}</label>`).join('')}<div class="row end"><button class=ghost onclick=closeM()>Annuler</button><button id=ok>Enregistrer</button></div></div>`;m.style.display='flex';
@@ -91,9 +98,9 @@ function logout(){me=null;try{delete localStorage.ent}catch(x){}render()}
 const nav=v=>{view=v;S={};window.A=1;render()};
 function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
 function render(){if(!me){try{if(localStorage.ent&&D.users&&D.users[localStorage.ent]){me={id:localStorage.ent,...D.users[localStorage.ent]};view=MENU[me.type][0][0]}}catch(x){}}
-if(!me){if(!$('#login'))login();return}const V={accueil,vs,msg,classes,mat:matieres,comptes,appel,edt,eval:evals,cdt,sanc,devoirs,notes}[view];
+if(!me){if(!$('#login'))login();return}const V={accueil,vs,msg,classes,mat:matieres,comptes,appel,edt,eval:evals,cdt,sanc,devoirs,notes,tableau}[view];
 const nu=L(D.msgs).filter(x=>x.to==me.id&&!x.lu&&!x['x_'+me.id]).length;
-$('#app').innerHTML=`<main class="${window.A?'pg':''}">${V()}</main><aside><div class=logo>🎓</div><h1>ENT Lescop</h1><small>${e(me.nom)}<br>${me.type}</small>${MENU[me.type].map(([k,l])=>`<a tabindex=0 class="${k==view?'on':''}" onclick="nav('${k}')"><i>${ICO[k]}</i>${l}${k=='msg'&&nu?`<b class=bd>${nu}</b>`:''}</a>`).join('')}<div class=sp></div><a onclick=logout()><i>↩</i>Déconnexion</a></aside>`;window.A=0}
+$('#app').innerHTML=`<main class="${window.A?'pg':''}">${V()}</main><aside><div class=logo>🎓</div><h1>ENT Lescop</h1><small>${e(me.nom)}<br>${me.type}</small>${MENU[me.type].map(([k,l])=>`<a tabindex=0 class="${k==view?'on':''}" onclick="nav('${k}')"><i>${ICO[k]}</i>${l}${k=='msg'&&nu?`<b class=bd>${nu}</b>`:''}</a>`).join('')}<div class=sp></div><a onclick=logout()><i>↩</i>Déconnexion</a></aside>`;window.A=0;if(view=='tableau')bindBoard()}
 const av=u=>u.photo?`<img class=av src="${u.photo}">`:`<span class=av>${e((u.nom||'?')[0])}</span>`;
 /* ACCUEIL */
 const PC={Jaune:'#fde68a',Rose:'#fbcfe8',Bleu:'#bfdbfe',Vert:'#bbf7d0'};
@@ -157,8 +164,33 @@ function newDev(){frm('Nouveau devoir',[{k:'classe',l:'Classe',t:'select',o:opts
 function devoirs(){const d=L(D.devoirs).filter(x=>x.classe==me.classe).sort((a,b)=>a.date>b.date?1:-1);
 return`<h2>Devoirs</h2>${d.map(x=>{const m=D.matieres?.[x.matiere]||{nom:'?',couleur:'#888'};return`<div class=card style="border-left:8px solid ${m.couleur}"><b>${e(m.nom)}</b> <span class=mut>pour le ${x.date} · ${e(U(x.prof).nom)}</span><p style="white-space:pre-wrap">${e(x.txt)}</p></div>`}).join('')||'<p class=mut>Pas de devoirs. 🎉</p>'}`}
 /* NOTES */
-function notes(){const ev=L(D.evals).filter(x=>x.classe==me.classe),by={};let T=0,C=0;
-ev.forEach(x=>{const v=(x.notes||{})[me.id];if(v==null)return;(by[x.matiere]=by[x.matiere]||{n:0,c:0,l:[]}).l.push([x,v]);if(x.mode=='note'){const n=v/x.sur*20;by[x.matiere].n+=n*x.coef;by[x.matiere].c+=x.coef;T+=n*x.coef;C+=x.coef}});
-return`<h2>Notes</h2><div class=card><h3>Moyenne générale : ${C?(T/C).toFixed(2)+' / 20':'—'}</h3></div>${Object.entries(by).map(([m,o])=>{const M=D.matieres?.[m]||{nom:'?',couleur:'#888'};return`<div class=card style="border-left:8px solid ${M.couleur}"><div class=row style="justify-content:space-between"><b>${e(M.nom)}</b><b>${o.c?(o.n/o.c).toFixed(2)+' / 20':''}</b></div><table>${o.l.map(([x,v])=>`<tr><td>${e(x.titre)}<br><span class=mut>${e(x.comp||'')} · coef ${x.coef}</span></td><td style="text-align:right">${x.mode=='note'?`<b>${v}</b> / ${x.sur}`:`<span class=dot style="background:${COL[v]}" title="${v}"></span>`}</td></tr>`).join('')}</table></div>`}).join('')||'<p class=mut>Aucune note pour le moment.</p>'}`}
+function notes(){const ev=L(D.evals).filter(x=>x.classe==me.classe),by={};
+ev.forEach(x=>{const v=(x.notes||{})[me.id];if(v==null)return;const o=by[x.matiere]=by[x.matiere]||{n:0,c:0,l:[]};o.l.push([x,v]);if(x.mode=='note'){o.n+=v/x.sur*20*x.coef;o.c+=x.coef}});
+const mo=m=>{const c=m<8?COL.Rouge:m<12?COL.Jaune:m<15?COL.Bleu:COL.Vert;return`<b class=mo style="background:${c};color:${c==COL.Jaune?'#222':'#fff'}">${m.toFixed(2)}</b>`};
+const rows=Object.entries(by).map(([id,o])=>({M:D.matieres?.[id]||{nom:'?',couleur:'#888'},o,m:o.c?o.n/o.c:null})),ok=rows.filter(r=>r.m!=null),g=ok.length?ok.reduce((a,r)=>a+r.m,0)/ok.length:null;
+return`<h2>Notes</h2><div class=card style="padding:0;overflow:auto"><table class=nt><thead><tr><th>Matière</th><th>Notes</th><th>Moyenne</th></tr></thead><tbody>${rows.map(r=>`<tr><td style="border-left:8px solid ${r.M.couleur}"><b>${e(r.M.nom)}</b></td><td>${r.o.l.map(([x,v])=>x.mode=='note'?`<span class=nc title="${e(x.titre+' · '+(x.comp||'')+' · coef '+x.coef)}">${v}<small>/${x.sur}</small></span>`:`<span class=dot style="background:${COL[v]}" title="${e(x.titre)}"></span>`).join('')}</td><td>${r.m!=null?mo(r.m):'—'}</td></tr>`).join('')||'<tr><td colspan=3 class=mut>Aucune note pour le moment.</td></tr>'}<tr class=tot><td><b>Moyenne générale</b></td><td></td><td>${g!=null?mo(g):'—'}</td></tr></tbody></table></div>`}
+/* TABLEAU */
+function tableau(){const ps=me.type=='prof',b=S.tb&&D.tableaux?.[S.tb];
+if(b)return`<div class=row><button class=ghost onclick="S.tb=null;render()">← Tableaux</button><h2 style="margin:0">${e(b.titre)}</h2><span class=mut>${e((D.classes?.[b.classe]||{}).nom)} · ${e((D.matieres?.[b.matiere]||{}).nom)}</span></div>${ps?toolbar():'<p class=mut>Le professeur peut modifier ce tableau en direct.</p>'}${boardHTML(b,ps)}`;
+const l=L(D.tableaux).filter(x=>ps?x.prof==me.id:x.classe==me.classe).sort((a,c)=>c.ts-a.ts);
+return`<div class=row style="justify-content:space-between"><h2>Tableau</h2>${ps?`<button onclick="newTb()">+ Nouveau tableau</button>`:''}</div><div class=grid>${l.map(x=>{const m=D.matieres?.[x.matiere]||{nom:'?',couleur:'#888'};return`<div class=card style="border-left:8px solid ${m.couleur};cursor:pointer" onclick="S.tb='${x.id}';S.tool='pen';render()"><b>${e(x.titre)}</b><div class=mut>${e(m.nom)} · ${ps?e((D.classes?.[x.classe]||{}).nom):e(U(x.prof).nom)}<br>${new Date(x.ts).toLocaleDateString('fr-FR')}</div>${ps?`<button class=red style="margin-top:8px" onclick="event.stopPropagation();confirm('Supprimer ce tableau ?')&&del('tableaux/${x.id}')">×</button>`:''}</div>`}).join('')||'<p class=mut>Aucun tableau pour le moment.</p>'}</div>`}
+function newTb(){frm('Nouveau tableau',[{k:'titre',l:'Titre',v:''},{k:'classe',l:'Classe',t:'select',o:opts(cls())},{k:'matiere',l:'Matière',t:'select',o:opts(mats())}],r=>{r.prof=me.id;r.ts=Date.now();S.tb=push('tableaux',r).key;S.tool='pen'})}
+function boardHTML(b,ed){const it=L(b.items).sort((x,y)=>x.ts-y.ts),ok=u=>/^https?:/i.test(u)?u:'#';
+return`<div class="bd ${ed?'ed':''}" id=bd><svg viewBox="0 0 1000 600" preserveAspectRatio=none>${it.filter(x=>x.t=='s').map(x=>`<g data-id="${x.id}"><polyline fill=none stroke="${e(x.c)}" stroke-width="${+x.w}" stroke-linecap=round stroke-linejoin=round points="${e(x.p)}"/>${ed?`<polyline class=hit fill=none points="${e(x.p)}"/>`:''}</g>`).join('')}</svg>${it.filter(x=>x.t!='s').map(x=>{const st=`left:${x.x/10}%;top:${x.y/6}%`;
+return x.t=='t'?`<div class=bi data-id="${x.id}" style="${st};color:${e(x.c)};font-size:${+x.sz/10}cqw">${e(x.txt)}</div>`:x.t=='i'?`<img class=bi data-id="${x.id}" style="${st};width:${+x.w/10}%" src="${e(x.src)}">`:`<a class="bi bl" data-id="${x.id}" style="${st}" href="${e(ok(x.url))}" target=_blank rel=noopener>🔗 ${e(x.txt||x.url)}</a>`}).join('')}</div>`}
+function toolbar(){const T=[['pen','✏️','Crayon'],['t','🔤','Texte'],['i','🖼️','Image'],['l','🔗','Lien'],['er','🧽','Gomme']];S.col=S.col||'#14213d';S.w=S.w||4;
+return`<div class="card row tb">${T.map(([k,i,l])=>`<button class="${S.tool==k?'':'ghost'}" onclick="S.tool='${k}';render()">${i} ${l}</button>`).join('')}<input type=color value="${S.col}" style="width:48px;padding:2px" onchange="S.col=this.value"><select style="width:80px" onchange="S.w=+this.value">${[2,4,8,14].map(w=>`<option ${w==S.w?'selected':''}>${w}</option>`).join('')}</select><button class=ghost onclick="undoTb()">↩ Annuler</button><button class=ghost onclick="confirm('Tout effacer ?')&&del('tableaux/'+S.tb+'/items')">🗑 Tout effacer</button></div>`}
+function undoTb(){const l=L(D.tableaux?.[S.tb]?.items).sort((a,b)=>b.ts-a.ts);if(l[0])del('tableaux/'+S.tb+'/items/'+l[0].id)}
+function bindBoard(){const b=$('#bd');if(!b||me.type!='prof'||!S.tb)return;const P='tableaux/'+S.tb+'/items';let pts=null,tmp=null;
+const pt=ev=>{const r=b.getBoundingClientRect();return[Math.round((ev.clientX-r.left)/r.width*1000),Math.round((ev.clientY-r.top)/r.height*600)]};
+b.onpointerdown=ev=>{const t=S.tool,[x,y]=pt(ev),it=ev.target.closest('[data-id]'),ts=Date.now();
+if(t=='er'){if(it)del(P+'/'+it.dataset.id);return}
+if(t=='pen'){ev.preventDefault();b.setPointerCapture(ev.pointerId);window.DRAW=1;pts=[[x,y]];tmp=document.createElementNS('http://www.w3.org/2000/svg','polyline');tmp.setAttribute('fill','none');tmp.setAttribute('stroke',S.col);tmp.setAttribute('stroke-width',S.w);tmp.setAttribute('stroke-linecap','round');b.querySelector('svg').appendChild(tmp);return}
+if(it)return;
+if(t=='t')frm('Texte',[{k:'txt',l:'Texte',t:'textarea'},{k:'sz',l:'Taille',t:'select',o:[[20,'Petit'],[32,'Moyen'],[52,'Grand'],[80,'Très grand']],v:32}],r=>r.txt&&push(P,{t:'t',x,y,txt:r.txt,sz:+r.sz,c:S.col,ts}));
+if(t=='i')frm('Image',[{k:'src',l:'Image',t:'file',max:900},{k:'w',l:'Largeur',t:'select',o:[[200,'Petite'],[350,'Moyenne'],[550,'Grande']],v:350}],r=>r.src&&push(P,{t:'i',x,y,w:+r.w,src:r.src,ts}));
+if(t=='l')frm('Lien',[{k:'url',l:'Adresse du lien',v:'https://'},{k:'txt',l:'Texte affiché',v:''}],r=>r.url&&push(P,{t:'l',x,y,url:/^https?:\/\//i.test(r.url)?r.url:'https://'+r.url,txt:r.txt,ts}))};
+b.onpointermove=ev=>{if(!pts)return;const q=pt(ev),l=pts[pts.length-1];if(Math.abs(q[0]-l[0])+Math.abs(q[1]-l[1])<3)return;pts.push(q);tmp.setAttribute('points',pts.map(p=>p.join(',')).join(' '))};
+b.onpointerup=b.onpointercancel=()=>{if(!pts)return;const p=pts;pts=null;window.DRAW=0;if(p.length==1)p.push([p[0][0]+1,p[0][1]]);push(P,{t:'s',c:S.col,w:S.w,p:p.map(q=>q.join(',')).join(' '),ts:Date.now()})}}
 render();
 </script></body></html>

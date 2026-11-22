@@ -66,6 +66,9 @@ table{width:100%;border-collapse:collapse}td,th{padding:10px 8px;border-bottom:1
 .bi{position:absolute;white-space:pre-wrap;line-height:1.2;max-width:90%}img.bi{height:auto;border-radius:8px;box-shadow:0 4px 14px #0003}
 a.bl{background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;padding:6px 14px;border-radius:99px;font-size:max(12px,1.8cqw);text-decoration:none;font-weight:700;box-shadow:0 4px 14px #1d4ed855;white-space:nowrap}
 .bd .hit{stroke:transparent;stroke-width:22;pointer-events:stroke}.tb{margin:14px 0}
+.hd small{font-weight:600;color:var(--mut)}.hd.td,.hd.td small{color:var(--bl)}
+.sl.ca{background:repeating-linear-gradient(135deg,#e5384d 0 12px,#c9283c 12px 24px);border:2px solid #ffffff66;color:#fff}
+.sl.rt{background:#111827;border:2px dashed #f5c518;color:#fff}
 </style></head><body>
 <div id="app"></div><div id="modal"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-app-compat.min.js"></script>
@@ -73,12 +76,12 @@ a.bl{background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;padding:6px 1
 <script>
 firebase.initializeApp({apiKey:"AIzaSyBPq6Wfxzq02MfK69BFxHm9_FUjDGTmAcw",authDomain:"kykychat-24c7f.firebaseapp.com",databaseURL:"https://kykychat-24c7f-default-rtdb.firebaseio.com",projectId:"kykychat-24c7f",storageBucket:"kykychat-24c7f.firebasestorage.app",messagingSenderId:"342562811927",appId:"1:342562811927:web:0fed1e1f511c4fddcfec52"});
 const db=firebase.database().ref('lescop');
-let D={},me=null,view='',S={},dirty=false,boot=false;
+let D={},WK=0,me=null,view='',S={},dirty=false,boot=false;
 const $=s=>document.querySelector(s),L=o=>Object.entries(o||{}).map(([id,v])=>({id,...v}));
 const e=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const push=(p,o)=>db.child(p).push(o),upd=(p,o)=>db.child(p).update(o),del=p=>db.child(p).remove();
 const U=id=>(D.users||{})[id]||{nom:'(supprimé)'},users=t=>L(D.users).filter(u=>!t||u.type==t);
-const cls=()=>L(D.classes),mats=()=>L(D.matieres),today=()=>new Date().toISOString().slice(0,10);
+const cls=()=>L(D.classes),mats=()=>L(D.matieres),today=()=>iso(new Date());
 const opts=(a,f=x=>x.id,l=x=>x.nom)=>a.map(x=>[f(x),l(x)]);
 const COL={Rouge:'#e5484d',Jaune:'#f5c518',Bleu:'#3b82f6',Vert:'#30a46c'};
 const JOURS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
@@ -95,7 +98,7 @@ $('#ok').onclick=async()=>{const r={};for(const f of fs){const x=$('#f_'+f.k);r[
 function login(){$('#app').innerHTML=`<div id=login class=card><h2>ENT Lescop</h2><label>Identifiant<input id=lg autocomplete=username></label><label>Mot de passe<input id=pw type=password autocomplete=current-password></label><button onclick=doLogin() style="width:100%">Se connecter</button><p id=err class=mut></p></div>`;$('#pw').addEventListener('keydown',k=>{if(k.key=='Enter')doLogin()});$('#lg').focus()}
 function doLogin(){if(!D.users){$('#err').textContent='Connexion à la base en cours… réessaie dans une seconde.';return}const u=users().find(u=>u.login==$('#lg').value&&u.pw==$('#pw').value);if(!u){$('#err').textContent='Identifiant ou mot de passe incorrect.';return}me=u;view=MENU[u.type][0][0];try{localStorage.ent=u.id}catch(x){}render()}
 function logout(){me=null;try{delete localStorage.ent}catch(x){}render()}
-const nav=v=>{view=v;S={};window.A=1;render()};
+const nav=v=>{view=v;S={};WK=0;window.A=1;render()};
 function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
 function render(){if(!me){try{if(localStorage.ent&&D.users&&D.users[localStorage.ent]){me={id:localStorage.ent,...D.users[localStorage.ent]};view=MENU[me.type][0][0]}}catch(x){}}
 if(!me){if(!$('#login'))login();return}const V={accueil,vs,msg,classes,mat:matieres,comptes,appel,edt,eval:evals,cdt,sanc,devoirs,notes,tableau}[view];
@@ -119,19 +122,26 @@ function classes(){const c=S.cl&&D.classes?.[S.cl];
 if(c)return`<div class=row><button class=ghost onclick="S={};render()">← Classes</button><h2 style="margin:0">${e(c.nom)}</h2><button onclick="editSlot('${S.cl}')">+ Cours</button></div><p class=mut>${users('eleve').filter(u=>u.classe==S.cl).length} élève(s)</p>${edtHTML(L(c.edt),'admin',S.cl)}`;
 return`<div class=row style="justify-content:space-between"><h2>Classes</h2><button onclick="frm('Nouvelle classe',[{k:'nom',l:'Nom de la classe'}],r=>push('classes',r))">+ Classe</button></div><div class=grid>${cls().map(c=>`<div class=card><b>${e(c.nom)}</b><p class=mut>${users('eleve').filter(u=>u.classe==c.id).length} élèves</p><div class=row><button onclick="S.cl='${c.id}';render()">Emploi du temps</button><button class=red onclick="confirm('Supprimer la classe ?')&&del('classes/${c.id}')">×</button></div></div>`).join('')}</div>`}
 function editSlot(cid,sid){const x=sid?D.classes[cid].edt[sid]:{heure:'08:00',duree:60};frm('Cours',[{k:'jour',l:'Jour',t:'select',o:JOURS.map((j,i)=>[i,j]),v:x.jour},{k:'heure',l:'Heure',t:'time',v:x.heure},{k:'duree',l:'Durée (min)',t:'number',v:x.duree},{k:'matiere',l:'Matière',t:'select',o:opts(mats()),v:x.matiere},{k:'prof',l:'Professeur',t:'select',o:opts(users('prof')),v:x.prof},{k:'lieu',l:'Lieu / salle',v:x.lieu}],r=>{r.jour=+r.jour;r.duree=+r.duree;sid?upd(`classes/${cid}/edt/${sid}`,r):push(`classes/${cid}/edt`,r)})}
-function edtHTML(sl,mode,cid){const h=['08','09','10','11','12','13','14','15','16','17','18'];
-return`<div class=card style="overflow:auto"><div class=edt style="min-width:820px"><div></div>${JOURS.map(j=>`<div class=hd>${j}</div>`).join('')}<div>${h.map(x=>`<div class=hr>${x}h</div>`).join('')}</div>${JOURS.map((j,d)=>`<div class=col>${sl.filter(s=>s.jour==d).map(s=>{const [a,b]=(s.heure||'8:00').split(':'),t=(+a-8)*60+ +b,m=D.matieres?.[s.matiere]||{nom:'?',couleur:'#888'};
-return`<div class=sl style="top:${t}px;height:${s.duree}px;background:${m.couleur}" ${mode=='admin'?`onclick="slotMenu('${cid}','${s.id}')"`:''}><b>${e(m.nom)}</b><br>${s.heure} · ${e(s.lieu||'')}<br>${e(U(s.prof).nom)}${s.cls?' · '+e(s.cls):''}</div>`}).join('')}</div>`).join('')}</div></div>`}
+function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function monday(o){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7)+o*7);return d}
+function profAbs(p,d){return L(D.absprofs).some(a=>a.prof==p&&a.du<=d&&d<=a.au)}
+function edtHTML(sl,mode,cid,ex=[]){const h=['08','09','10','11','12','13','14','15','16','17','18'],mo=monday(WK),dd=JOURS.map((_,i)=>{const d=new Date(mo);d.setDate(d.getDate()+i);return d}),ds=dd.map(iso),tm=t=>{const [a,b]=(t||'8:00').split(':');return(+a-8)*60+ +b};
+const nv=`<div class=row style="margin-bottom:12px"><button class=ghost onclick="WK--;render()">‹</button><b>Semaine du ${dd[0].toLocaleDateString('fr-FR',{day:'numeric',month:'long'})}</b><button class=ghost onclick="WK++;render()">›</button>${WK?`<button class=ghost onclick="WK=0;render()">Aujourd'hui</button>`:''}</div>`;
+return nv+`<div class=card style="overflow:auto"><div class=edt style="min-width:820px"><div></div>${JOURS.map((j,i)=>`<div class="hd ${ds[i]==today()?'td':''}">${j}<br><small>${dd[i].getDate()}/${dd[i].getMonth()+1}</small></div>`).join('')}<div>${h.map(x=>`<div class=hr>${x}h</div>`).join('')}</div>${JOURS.map((j,d)=>`<div class=col>${sl.filter(s=>s.jour==d).map(s=>{const m=D.matieres?.[s.matiere]||{nom:'?',couleur:'#888'},ca=profAbs(s.prof,ds[d]);
+return`<div class="sl ${ca?'ca':''}" style="top:${tm(s.heure)}px;height:${s.duree}px;${ca?'':'background:'+m.couleur}" ${mode=='admin'?`onclick="slotMenu('${cid}','${s.id}')"`:''}><b>${e(m.nom)}</b><br>${ca?'Cours annulé · prof absent':`${s.heure} · ${e(s.lieu||'')}<br>${e(U(s.prof).nom)}${s.cls?' · '+e(s.cls):''}`}</div>`}).join('')}${ex.filter(x=>x.date==ds[d]).map(x=>`<div class="sl rt" style="top:${tm(x.heure)}px;height:${x.duree}px"><b>⛔ Retenue</b><br>${x.heure} · ${x.duree} min<br>${e(x.motif||'')}</div>`).join('')}</div>`).join('')}</div></div>`}
 function slotMenu(c,s){frm('Cours',[{k:'a',l:'Action',t:'select',o:[['m','Modifier'],['d','Supprimer']]}],r=>{if(r.a=='d')del(`classes/${c}/edt/${s}`);else setTimeout(()=>editSlot(c,s),50)})}
-function edt(){let sl;if(me.type=='prof'){sl=[];cls().forEach(c=>L(c.edt).forEach(s=>s.prof==me.id&&sl.push({...s,cls:c.nom})))}else sl=L(D.classes?.[me.classe]?.edt);return`<h2>Emploi du temps</h2>${sl.length?edtHTML(sl):'<p class=mut>Aucun cours programmé.</p>'}`}
+function edt(){let sl,ex=[];if(me.type=='prof'){sl=[];cls().forEach(c=>L(c.edt).forEach(s=>s.prof==me.id&&sl.push({...s,cls:c.nom})))}else{sl=L(D.classes?.[me.classe]?.edt);ex=L(D.vs).filter(v=>v.eleve==me.id&&v.kind=='Retenue'&&v.heure).map(v=>({date:v.date,heure:v.heure,duree:+v.duree||60,motif:v.motif}))}
+return`<h2>Emploi du temps</h2>${sl.length||ex.length?edtHTML(sl,0,0,ex):'<p class=mut>Aucun cours programmé.</p>'}`}
 /* VIE SCOLAIRE */
 const KIND=['Absence','Retard','Avertissement','Retenue'];
-function billet(kinds){const el=users('eleve');frm('Nouveau billet',[{k:'eleve',l:'Élève',t:'select',o:opts(el)},{k:'kind',l:'Type',t:'select',o:kinds.map(k=>[k,k])},{k:'date',l:'Date',t:'date',v:today()},{k:'motif',l:'Motif',t:'textarea'}],r=>{r.auteur=me.id;push('vs',r)})}
-function vsList(a,own){return`<div class=card><table>${a.map(v=>`<tr><td>${v.date}</td>${own?'':`<td>${e(U(v.eleve).nom)}</td>`}<td><span class=tag style="${v.kind=='Absence'||v.kind=='Retenue'?'background:#e5484d33':v.kind=='Retard'?'background:#f5c51855':''}">${v.kind}</span></td><td>${e(v.motif||'')}<br><span class=mut>par ${e(U(v.auteur).nom)}</span></td>${me.type=='admin'?`<td><button class=red onclick="del('vs/${v.id}')">×</button></td>`:''}</tr>`).join('')||'<tr><td class=mut>Rien à signaler.</td></tr>'}</table></div>`}
+function billet(kinds){const el=users('eleve');frm('Nouveau billet',[{k:'eleve',l:'Élève',t:'select',o:opts(el)},{k:'kind',l:'Type',t:'select',o:kinds.map(k=>[k,k])},{k:'date',l:'Date (retenue ou événement)',t:'date',v:today()},{k:'heure',l:'Heure (retenue)',t:'time',v:'16:00'},{k:'duree',l:'Durée en minutes (retenue)',t:'number',v:60},{k:'motif',l:'Motif',t:'textarea'}],r=>{r.auteur=me.id;if(r.kind=='Retenue')r.duree=+r.duree||60;else{delete r.heure;delete r.duree}push('vs',r)})}
+function vsList(a,own){return`<div class=card><table>${a.map(v=>`<tr><td>${v.date}</td>${own?'':`<td>${e(U(v.eleve).nom)}</td>`}<td><span class=tag style="${v.kind=='Absence'||v.kind=='Retenue'?'background:#e5484d33':v.kind=='Retard'?'background:#f5c51855':''}">${v.kind}</span>${v.heure?`<br><span class=mut>${v.heure} · ${v.duree} min</span>`:''}</td><td>${e(v.motif||'')}<br><span class=mut>par ${e(U(v.auteur).nom)}</span></td>${me.type=='admin'?`<td><button class=red onclick="del('vs/${v.id}')">×</button></td>`:''}</tr>`).join('')||'<tr><td class=mut>Rien à signaler.</td></tr>'}</table></div>`}
 function vs(){const a=L(D.vs).sort((x,y)=>y.date>x.date?1:-1);
 if(me.type=='eleve')return`<h2>Vie scolaire</h2>${vsList(a.filter(v=>v.eleve==me.id),1)}`;
 const ab=a.filter(v=>v.date==today()&&v.kind=='Absence');
-return`<div class=row style="justify-content:space-between"><h2>Vie scolaire</h2><button onclick="billet(KIND)">+ Billet / sanction</button></div><h3>Absents aujourd'hui (${ab.length})</h3>${vsList(ab)}<h3>Historique</h3>${vsList(a)}`}
+return`<div class=row style="justify-content:space-between"><h2>Vie scolaire</h2><button onclick="billet(KIND)">+ Billet / sanction</button></div><h3>Professeurs absents</h3><div class=row style="margin-bottom:10px"><button onclick="absProf()">+ Déclarer un prof absent</button></div>${absList()}<h3>Élèves absents aujourd'hui (${ab.length})</h3>${vsList(ab)}<h3>Historique</h3>${vsList(a)}`}
+function absList(){const l=L(D.absprofs).sort((a,b)=>b.du>a.du?1:-1);return`<div class=card><table>${l.map(a=>`<tr><td><b>${e(U(a.prof).nom)}</b></td><td>du ${a.du} au ${a.au}</td><td>${e(a.motif||'')}</td><td><button class=red onclick="del('absprofs/${a.id}')">×</button></td></tr>`).join('')||'<tr><td class=mut>Aucun professeur absent.</td></tr>'}</table></div>`}
+function absProf(){frm('Professeur absent',[{k:'prof',l:'Professeur',t:'select',o:opts(users('prof'))},{k:'du',l:'Du',t:'date',v:today()},{k:'au',l:'Au (inclus)',t:'date',v:today()},{k:'motif',l:'Motif',t:'textarea'}],r=>{if(r.au<r.du)r.au=r.du;push('absprofs',r)})}
 function sanc(){return`<div class=row style="justify-content:space-between"><h2>Sanctions</h2><button onclick="billet(['Avertissement','Retenue'])">+ Sanction</button></div>${vsList(L(D.vs).filter(v=>v.auteur==me.id&&/Aver|Rete/.test(v.kind)))}`}
 /* APPEL */
 function appel(){const c=S.ac,el=users('eleve').filter(u=>u.classe==c);S.abs=S.abs||{};
